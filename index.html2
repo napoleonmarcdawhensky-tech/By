@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEIRIN SUPPORT TOOL</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#010814;
+  --blue:#1a6fff;
+  --blue2:#0044cc;
+  --cyan:#00cfff;
+  --red:#ff1744;
+  --gold:#ffd700;
+  --muted:#1a3a6a;
+  --text:#d0e8ff;
+  --card:rgba(1,12,32,0.97);
+  --border:rgba(26,111,255,0.22);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{min-height:100vh;overflow-x:hidden;}
+body{
+  background:var(--bg);
+  font-family:'Rajdhani',sans-serif;
+  color:var(--text);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;
+}
+
+/* ── BG AURORA BLUE ── */
+.aurora{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.ab{position:absolute;border-radius:50%;filter:blur(100px);opacity:.13;animation:abMove ease-in-out infinite;}
+.ab1{width:600px;height:400px;background:radial-gradient(circle,#0044cc,transparent);top:-100px;left:-150px;animation-duration:14s;}
+.ab2{width:500px;height:500px;background:radial-gradient(circle,#00cfff,transparent);bottom:-130px;right:-100px;animation-duration:17s;animation-delay:-7s;}
+.ab3{width:400px;height:300px;background:radial-gradient(circle,#1a6fff,transparent);top:40%;left:20%;animation-duration:12s;animation-delay:-4s;}
+.ab4{width:300px;height:300px;background:radial-gradient(circle,#ff1744,transparent);top:10%;right:5%;opacity:.06;animation-duration:10s;animation-delay:-2s;}
+@keyframes abMove{0%,100%{transform:translate(0,0)scale(1);}40%{transform:translate(35px,-28px)scale(1.08);}70%{transform:translate(-18px,38px)scale(.93);}}
+
+/* GRID */
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(rgba(26,111,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(26,111,255,.04) 1px,transparent 1px);
+  background-size:44px 44px;animation:gd 18s linear infinite;}
+@keyframes gd{to{background-position:0 44px;}}
+.scanline{position:fixed;inset:0;z-index:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px);}
+
+/* STARS */
+.stars-layer{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle ease-in-out infinite;}
+@keyframes twinkle{0%,100%{opacity:.06;}50%{opacity:.6;}}
+
+/* PLAYERS SILHOUETTES */
+.players{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.player{
+  position:absolute;
+  font-size:80px;
+  opacity:.04;
+  filter:drop-shadow(0 0 20px rgba(26,111,255,.8));
+  animation:playerFloat ease-in-out infinite;
+}
+.p1{bottom:-10px;left:-20px;animation-duration:8s;font-size:120px;}
+.p2{bottom:-10px;right:-20px;animation-duration:10s;animation-delay:-3s;font-size:100px;}
+.p3{bottom:20%;left:5%;animation-duration:7s;animation-delay:-1s;font-size:60px;opacity:.03;}
+.p4{top:10%;right:8%;animation-duration:9s;animation-delay:-5s;font-size:55px;opacity:.03;}
+@keyframes playerFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+
+/* BASKETBALLS */
+.balls{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+.ball{
+  position:absolute;opacity:0;font-size:22px;
+  animation:ballFall linear infinite;
+  filter:drop-shadow(0 0 8px rgba(26,111,255,.7));
+}
+@keyframes ballFall{
+  0%{transform:translateY(-60px)rotate(0deg);opacity:0;}
+  8%{opacity:.7;}88%{opacity:.4;}
+  100%{transform:translateY(110vh)rotate(720deg)translateX(40px);opacity:0;}
+}
+
+/* WRAP */
+.wrap{position:relative;z-index:2;width:100%;max-width:470px;padding:20px 14px 28px;display:flex;flex-direction:column;align-items:center;}
+
+/* HEADER */
+.header{text-align:center;margin-bottom:20px;animation:fdDown .85s ease both;}
+@keyframes fdDown{from{opacity:0;transform:translateY(-26px);}to{opacity:1;transform:translateY(0);}}
+
+/* AKASHI EYE LOGO */
+.logo-wrap{position:relative;width:130px;height:130px;margin:0 auto 12px;}
+.logo-glow{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(26,111,255,.2),transparent 70%);animation:lgPulse 3s ease-in-out infinite;}
+@keyframes lgPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:1;transform:scale(1.12);}}
+.ring{position:absolute;border-radius:50%;border:2px solid transparent;}
+.r1{inset:0;border-top-color:var(--blue);border-right-color:var(--blue);animation:spin 2.5s linear infinite;}
+.r2{inset:9px;border-bottom-color:var(--cyan);border-left-color:var(--cyan);animation:spin 2s linear infinite reverse;}
+.r3{inset:18px;border-top-color:rgba(255,23,68,.5);animation:spin 5s linear infinite;}
+.r4{inset:27px;border-bottom-color:rgba(26,111,255,.25);animation:spin 8s linear infinite reverse;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.logo-core{
+  position:absolute;inset:36px;
+  background:radial-gradient(circle at 40% 35%,#041840,#010814);
+  border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:inset 0 0 18px rgba(26,111,255,.2),0 0 45px rgba(26,111,255,.3);
+}
+/* Akashi Emperor Eye */
+.eye{font-size:20px;filter:drop-shadow(0 0 8px rgba(255,23,68,.8)) drop-shadow(0 0 15px rgba(26,111,255,.6));animation:eyePulse 2s ease-in-out infinite;}
+@keyframes eyePulse{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+.eye-sub{font-family:'Noto Sans JP',sans-serif;font-size:7px;color:rgba(26,111,255,.5);letter-spacing:2px;margin-top:2px;}
+
+/* AKASHI NAME BADGE */
+.akashi-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  margin-bottom:6px;
+  background:rgba(255,23,68,.08);
+  border:1px solid rgba(255,23,68,.25);
+  border-radius:20px;padding:4px 14px;
+  font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;color:#ff6688;
+}
+.rdot{width:5px;height:5px;border-radius:50%;background:#ff1744;box-shadow:0 0 6px #ff1744;animation:blink 1.2s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.2;}}
+
+.title-ban{
+  font-family:'Orbitron',monospace;font-size:28px;font-weight:900;
+  letter-spacing:6px;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--cyan),var(--blue),#60aaff,var(--cyan));
+  background-size:200% auto;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shine 4s linear infinite;
+}
+@keyframes shine{to{background-position:200% center;}}
+.title-sub{font-size:9px;letter-spacing:5px;color:var(--muted);margin-top:4px;text-transform:uppercase;}
+
+.chip{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:rgba(26,111,255,.07);border:1px solid rgba(26,111,255,.22);border-radius:20px;padding:5px 14px;font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;color:var(--muted);}
+.cdot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:blink 1.4s ease-in-out infinite;}
+
+/* CARD */
+.card{
+  width:100%;background:var(--card);
+  border:1px solid var(--border);border-radius:28px;
+  padding:26px 20px;position:relative;overflow:hidden;
+  box-shadow:0 0 60px rgba(26,111,255,.1),0 0 120px rgba(0,68,204,.06),inset 0 1px 0 rgba(26,111,255,.16);
+  animation:fdUp .9s ease .2s both;
+}
+@keyframes fdUp{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:translateY(0);}}
+.card::after{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--blue2),var(--cyan),var(--blue2),transparent);}
+.shimmer{position:absolute;top:-100%;left:-100%;width:300%;height:300%;background:conic-gradient(transparent 0deg,rgba(26,111,255,.015) 60deg,transparent 120deg);animation:rot 14s linear infinite;pointer-events:none;}
+@keyframes rot{to{transform:rotate(360deg);}}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* SECTIONS */
+.sec{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:4px;color:var(--muted);text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;position:relative;z-index:1;}
+.sec::before{content:'◆';font-size:5px;color:var(--blue2);}
+.sec::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(26,111,255,.3),transparent);}
+
+/* INPUT */
+.lbl{display:block;font-size:9px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:7px;position:relative;z-index:1;}
+.inp{width:100%;background:rgba(26,111,255,.05);border:1px solid rgba(26,111,255,.22);border-radius:14px;padding:13px 18px;color:var(--blue);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;letter-spacing:2px;outline:none;transition:all .3s;position:relative;z-index:1;caret-color:var(--cyan);}
+.inp::placeholder{color:rgba(26,111,255,.2);}
+.inp:focus{border-color:var(--cyan);background:rgba(26,111,255,.08);box-shadow:0 0 25px rgba(26,111,255,.18);color:var(--cyan);}
+.iw{margin-bottom:14px;position:relative;z-index:1;}
+
+/* BUTTONS */
+.btn-main{width:100%;position:relative;z-index:1;overflow:hidden;background:linear-gradient(135deg,rgba(26,111,255,.13),rgba(0,44,204,.06));border:1px solid rgba(26,111,255,.4);border-radius:16px;padding:14px;color:var(--blue);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:4px;cursor:pointer;transition:all .3s;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px;}
+.btn-main::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,207,255,.15),transparent);transform:translateX(-100%);transition:transform .55s;}
+.btn-main:hover::before{transform:translateX(100%);}
+.btn-main:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 32px rgba(26,111,255,.32);transform:translateY(-2px);}
+.btn-main:active{transform:translateY(0);}
+
+/* SEND BUTTON */
+.btn-send{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:100%;position:relative;z-index:1;overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,207,255,.16),rgba(26,111,255,.1));
+  border:1px solid var(--cyan);border-radius:16px;padding:17px;
+  color:#fff;font-family:'Orbitron',monospace;font-size:15px;font-weight:900;letter-spacing:7px;
+  cursor:pointer;transition:all .3s;text-transform:uppercase;
+  box-shadow:0 0 20px rgba(0,207,255,.18);
+}
+.btn-send::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.07),transparent);transform:translateX(-100%);transition:transform .6s;}
+.btn-send:hover::before{transform:translateX(100%);}
+.btn-send:hover{box-shadow:0 0 44px rgba(0,207,255,.44),0 0 80px rgba(0,207,255,.12);transform:translateY(-3px);}
+.btn-send:active{transform:translateY(0);}
+.si{font-size:20px;animation:sBounce 2s ease-in-out infinite;}
+@keyframes sBounce{0%,100%{transform:translateX(0);}50%{transform:translateX(5px);}}
+
+.btn-ghost{width:100%;position:relative;z-index:1;background:transparent;border:1px solid rgba(26,111,255,.14);border-radius:12px;padding:10px;color:var(--muted);font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;cursor:pointer;transition:all .3s;text-transform:uppercase;margin-top:8px;}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue);}
+.err{text-align:center;color:#ff4466;font-size:11px;letter-spacing:2px;margin-top:10px;display:none;position:relative;z-index:1;}
+
+/* TYPE BUTTONS */
+.type-row{display:flex;gap:8px;margin-bottom:18px;position:relative;z-index:1;overflow-x:auto;padding-bottom:4px;}
+.type-row::-webkit-scrollbar{height:2px;}
+.type-row::-webkit-scrollbar-thumb{background:var(--blue2);border-radius:2px;}
+.tbn{flex-shrink:0;min-width:90px;background:rgba(26,111,255,.04);border:1px solid rgba(26,111,255,.15);border-radius:16px;padding:13px 10px;text-align:center;cursor:pointer;transition:all .28s;position:relative;overflow:hidden;}
+.tbn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue2),var(--cyan));transform:scaleX(0);transition:transform .3s;border-radius:0 0 2px 2px;}
+.tbn:hover::after,.tbn.sel::after{transform:scaleX(1);}
+.tbn:hover,.tbn.sel{border-color:var(--cyan);background:rgba(26,111,255,.12);box-shadow:0 0 20px rgba(26,111,255,.22);transform:translateY(-3px);}
+.tbn .ti{font-size:22px;display:block;margin-bottom:5px;filter:drop-shadow(0 0 6px rgba(26,111,255,.7));}
+.tbn .tn{font-family:'Orbitron',monospace;font-size:7px;font-weight:700;letter-spacing:1px;color:var(--blue);text-transform:uppercase;}
+.tbn.sel .tn{color:var(--cyan);}
+
+/* JERSEY LABELS for types */
+.jersey{font-size:9px;color:rgba(26,111,255,.5);margin-top:2px;font-family:'Orbitron',monospace;}
+
+/* TEMPLATE */
+.tpl{position:relative;z-index:1;background:rgba(26,111,255,.03);border:1px solid rgba(26,111,255,.1);border-left:3px solid var(--blue2);border-radius:14px;padding:16px;margin-bottom:14px;font-size:13px;line-height:1.8;color:rgba(208,232,255,.72);white-space:pre-wrap;word-break:break-word;min-height:110px;max-height:190px;overflow-y:auto;}
+.tpl::-webkit-scrollbar{width:3px;}
+.tpl::-webkit-scrollbar-thumb{background:var(--blue2);border-radius:2px;}
+
+/* MAIL TAGS */
+.mail-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;position:relative;z-index:1;}
+.mtag{background:rgba(0,207,255,.07);border:1px solid rgba(0,207,255,.2);border-radius:20px;padding:5px 13px;font-size:10px;color:#80d8ff;letter-spacing:.5px;}
+
+/* NAV */
+.nav-bot{display:flex;gap:8px;margin-top:14px;position:relative;z-index:1;}
+.nibn{flex:1;background:rgba(26,111,255,.04);border:1px solid rgba(26,111,255,.12);border-radius:12px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .25s;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.nibn:hover{border-color:var(--blue);background:rgba(26,111,255,.1);transform:translateY(-2px);}
+.nibn .ni{font-size:16px;}
+.nibn .nl{font-family:'Orbitron',monospace;font-size:6px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+.div{height:1px;background:linear-gradient(90deg,transparent,rgba(26,111,255,.28),rgba(0,207,255,.28),transparent);margin:14px 0;position:relative;z-index:1;}
+
+/* EDIT */
+.edit-area{width:100%;position:relative;z-index:1;background:rgba(26,111,255,.04);border:1px solid rgba(26,111,255,.15);border-radius:12px;padding:14px;color:var(--text);font-family:'Rajdhani',sans-serif;font-size:14px;line-height:1.6;outline:none;resize:vertical;min-height:120px;transition:border-color .3s;margin-bottom:12px;}
+.edit-area:focus{border-color:var(--cyan);}
+.btn-save{width:100%;position:relative;z-index:1;background:linear-gradient(135deg,rgba(0,207,255,.14),rgba(0,68,204,.07));border:1px solid var(--cyan);border-radius:13px;padding:13px;color:var(--cyan);font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:3px;cursor:pointer;transition:all .3s;margin-bottom:8px;}
+.btn-save:hover{box-shadow:0 0 26px rgba(0,207,255,.32);transform:translateY(-1px);}
+
+.acc-title{font-family:'Orbitron',monospace;font-size:10px;letter-spacing:5px;color:var(--muted);text-transform:uppercase;text-align:center;margin-bottom:20px;position:relative;z-index:1;}
+
+/* GENERATION LABEL */
+.gen-label{font-family:'Noto Sans JP',sans-serif;font-size:9px;color:rgba(26,111,255,.4);letter-spacing:2px;text-align:center;margin-bottom:16px;position:relative;z-index:1;}
+
+/* FOOTER */
+.footer{margin-top:16px;text-align:center;font-size:10px;letter-spacing:4px;text-transform:uppercase;background:linear-gradient(90deg,var(--blue2),var(--cyan),#60aaff);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shine 4s linear infinite;position:relative;z-index:2;}
+
+/* TOAST */
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(90px);background:rgba(26,111,255,.1);border:1px solid var(--blue);border-radius:30px;padding:12px 28px;color:var(--cyan);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:3px;box-shadow:0 0 28px rgba(26,111,255,.24);transition:transform .45s cubic-bezier(.34,1.56,.64,1);z-index:100;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<div class="aurora"><div class="ab ab1"></div><div class="ab ab2"></div><div class="ab ab3"></div><div class="ab ab4"></div></div>
+<div class="grid-bg"></div>
+<div class="scanline"></div>
+<div class="stars-layer" id="stars"></div>
+
+<!-- Silhouettes joueurs basket -->
+<div class="players">
+  <div class="player p1">🏀</div>
+  <div class="player p2">🏀</div>
+  <div class="player p3">⛹️</div>
+  <div class="player p4">⛹️</div>
+</div>
+
+<!-- Ballons qui tombent -->
+<div class="balls" id="balls"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo-wrap">
+      <div class="logo-glow"></div>
+      <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div><div class="ring r4"></div>
+      <div class="logo-core">
+        <span class="eye">👁️</span>
+        <span class="eye-sub">帝光</span>
+      </div>
+    </div>
+    <div class="akashi-badge"><div class="rdot"></div>AKASHI SEIJURO — #4</div>
+    <div class="title-ban">SEIRIN TOOL</div>
+    <div class="title-sub">Generation of Miracles — Support System</div>
+    <div class="chip"><div class="cdot"></div>SYSTEM ONLINE</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+    <div class="shimmer"></div>
+
+    <!-- ACCESS -->
+    <div class="page active" id="page-access">
+      <div class="acc-title">⬡ 帝光中学 — Accès Sécurisé ⬡</div>
+      <div class="gen-label">— Generation of Miracles Protocol —</div>
+      <div class="iw">
+        <label class="lbl">Code d'accès</label>
+        <input class="inp" type="password" id="inp-access" placeholder="Entrez le code..." autocomplete="off">
+      </div>
+      <button class="btn-main" id="btn-access">⚡ &nbsp;VALIDER</button>
+      <div class="err" id="err-access">✦ Code refusé — Je suis absolu</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="page" id="page-main">
+      <div class="sec">Choisir le Joueur / Type</div>
+      <div class="type-row">
+        <div class="tbn" id="t0"><span class="ti">🚫</span><span class="tn">BAN V1</span><div class="jersey">#10</div></div>
+        <div class="tbn" id="t1"><span class="ti">🔓</span><span class="tn">BAN V2</span><div class="jersey">#11</div></div>
+        <div class="tbn" id="t2"><span class="ti">🐛</span><span class="tn">BAN V3</span><div class="jersey">#7</div></div>
+        <div class="tbn" id="t3"><span class="ti">📵</span><span class="tn">BAN V4</span><div class="jersey">#4</div></div>
+      </div>
+
+      <div class="sec">Numéro WhatsApp</div>
+      <div class="iw">
+        <input class="inp" type="tel" id="inp-phone" placeholder="+243 000 000 000">
+      </div>
+
+      <div class="sec">Message Généré</div>
+      <div class="tpl" id="tpl-box">← Sélectionne un type ci-dessus</div>
+
+      <div class="sec">Envoi vers Support WhatsApp</div>
+      <div class="mail-row">
+        <span class="mtag">support@whatsapp.com</span>
+        <span class="mtag">smb@support.whatsapp.com</span>
+        <span class="mtag">abuse@whatsapp.com</span>
+        <span class="mtag">support@support.whatsapp.com</span>
+      </div>
+
+      <!-- FORM MAILTO — méthode la plus fiable pour ouvrir l'app mail -->
+      <form id="mail-form" method="post" enctype="text/plain">
+        <input type="hidden" name="subject" id="f-subject">
+        <input type="hidden" name="body" id="f-body">
+        <button type="button" class="btn-send" id="btn-send">
+          <span class="si">📨</span> SEND
+        </button>
+      </form>
+
+      <div class="div"></div>
+      <div class="nav-bot">
+        <div class="nibn" id="nav-home"><span class="ni">🔒</span><span class="nl">Accueil</span></div>
+        <div class="nibn" id="nav-opts"><span class="ni">✏️</span><span class="nl">Options</span></div>
+      </div>
+    </div>
+
+    <!-- EDIT CODE -->
+    <div class="page" id="page-editcode">
+      <div class="acc-title">⬡ Code Éditeur ⬡</div>
+      <div class="iw">
+        <label class="lbl">Code secret éditeur</label>
+        <input class="inp" type="password" id="inp-editcode" placeholder="Code éditeur..." autocomplete="off">
+      </div>
+      <button class="btn-main" id="btn-editcode">⚡ &nbsp;VALIDER</button>
+      <div class="err" id="err-edit">✦ Code incorrect</div>
+      <button class="btn-ghost" id="btn-back1">↩ RETOUR</button>
+    </div>
+
+    <!-- EDIT TEMPLATES -->
+    <div class="page" id="page-edit">
+      <div class="sec">Modifier Templates</div>
+      <div id="edit-forms"></div>
+      <button class="btn-save" id="btn-save">💾 &nbsp;SAUVEGARDER</button>
+      <button class="btn-ghost" id="btn-back2">↩ RETOUR</button>
+    </div>
+
+  </div>
+  <div class="footer">©by dev lordemeraude — 奇跡の世代</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+
+// Stars
+var sl=document.getElementById('stars');
+for(var i=0;i<80;i++){
+  var s=document.createElement('div');s.className='star';
+  var z=Math.random()*2+.5;
+  s.style.cssText='width:'+z+'px;height:'+z+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;animation-duration:'+(2+Math.random()*4)+'s;animation-delay:'+Math.random()*5+'s;';
+  sl.appendChild(s);
+}
+
+// Basketballs falling
+var bl=document.getElementById('balls');
+var bems=['🏀','🏀','🏀','⭐','🔵'];
+bems.forEach(function(e){
+  for(var i=0;i<4;i++){
+    var b=document.createElement('div');b.className='ball';b.textContent=e;
+    var sz=14+Math.random()*14;
+    b.style.cssText='left:'+Math.random()*100+'%;font-size:'+sz+'px;animation-duration:'+(8+Math.random()*12)+'s;animation-delay:'+Math.random()*15+'s;';
+    bl.appendChild(b);
+  }
+});
+
+// Config
+var ACCESS='PRIME';
+var EDITPW='DEV LORD EMERAUDE';
+var TO='support@whatsapp.com,smb@support.whatsapp.com,abuse@whatsapp.com,support@support.whatsapp.com';
+
+var tpls=[
+  {
+    subj:`🚨🚨 DENUNCIA URGENTE: VIOLACIÓN GRAVE DE LOS TÉRMINOS Y CONDICIONES DETECTADA 🚨🚨
+ALERTA DE SEGURIDAD — REVISIÓN INMEDIATA REQUERIDA`,
+    body:`peligroso (https://api.whatsapp.com/send?phone=+237654556023) 🚫❌💥
+Hola soporte de WhatsApp,
+Estoy escribiendo para denunciar de forma URGENTE un número de empresa que está abusando de WhatsApp y usando la plataforma para hacer cosas ilegales.
+📞 Número denunciado: https://api.whatsapp.com/send?phone=+237654556023
+Este número tiene apariencia de empresa y parece estarhttps://files.catbox.moe/fxm1o6.png Ele é tão forte 💪 que  “verificado/seguro” en Meta, pero en realidad se comporta como una cuenta criminal. ⚰️🤬
+Este contacto está haciendo lo siguiente:
+🚫 Estafas y engaños a usuarios 💔
+🚫 Spam constante y masivo 😷💥
+🚫 Compartir enlaces sospechosos e ilegales ❌
+🚫 Venta de cosas raras e inapropiadas 🍑🍆🤮https://xgore.net/cut-open-the-stomach-and-then-gut-a-man-escanor-off Today I'm 
+🚫 Contenido peligroso y comportamientos abusivos 🏴‍☠️
+🚫 Molestias repetidas y ataques por mensajes 🤬😞https://files.catbox.moe/fxm1o6.png Ele é tão forte 💪 que 
+Es INACEPTABLE que una cuenta así siga activa y peor aún que se presente como empresa “segura”. Esto daña la reputación de WhatsApp y pone en peligro a la comunidad. 💥🚫
+Les exijo que investiguen inmediatamente este número y que lo bloqueen o eliminen sin demora. ✔️✅❌
+Si no actúan rápido, este número seguirá estafando y difundiendo contenido ilegal. ⚰️🚫
+Tengo pruebas disponibles (capturas, mensajes, enlaces y registros de spam) y puedo enviarlas si es necesario.
+Espero una respuesta rápida.`
+  },
+  {
+    subj:`⚠️⚠️ URGENT REPORT: SERIOUS BREACH OF TERMS OF SERVICE IDENTIFIED ⚠️⚠️
+THIS CASE REQUIRES IMMEDIATE REVIEW AND ACTION`,
+    body:`👑 ИМПЕРИЯ ALDON: ГДЕ РОЖДАЕТСЯ БОГАТСТВО 👑 Забудь о посредственности. Ты заслуживаешь вершины. Мир E*TRADE открывает перед тобой двери к абсолютной роскоши и финансовой свободе, о которой ты всегда мечтал. 🌐 ТВОЙ ПЕРСОНАЛЬНЫЙ ВХОД: 🔗 Main Link: ALDON.COM 📉 МИРОВОЙ ТРЕЙДИНГ (TOP TRADING): IQ Option: Start Trading Now Olymp Trade: Professional Platform Pocket Option: Smart Choices 🎰 ЭЛИТНЫЙ КЛУБ СТАВОК И КАЗИНО (VIP STAKES): 🔥 1xBet: Global Betting Leader ⚽ Bet365: World's Largest Sportsbook 💎 BC.GAME: Crypto Casino World 🃏 STAKE: Elite Casino 🚀 ROOBET: Infinite Excitement 🏅 Melbet: Best Odds Guaranteed 💰 VIP ПЛАН ПРИБЫЛИ (ПУТЬ К МИЛЛИОНУ): 💵 Инвестируй 30k ⬅️ Выплата 600k 💵 Инвестируй 50k ⬅️ Выплата 1M 🏆 DON LEVEL (УРОВЕНЬ ДОНА): Инвестируй 100k ⬅️ Выплата 100M ✨ ПОЧЕМУ ВЫБИРАЮТ ИМПЕРИЮ ALDON? ✅ Мгновенный вывод: Твои деньги у тебя одним нажатием кнопки. ✅ Королевская поддержка: Мы с тобой на связи 24/7. ✅ Полная анонимность: Твоя безопасность — наш главный приоритет. 🚨 МЕСТА ОГРАНИЧЕНЫ.. НАЧНИ СВОЙ ПУТЬ К СЛАВЕ ПРЯМО СЕЙЧАС! 📱 Связаться через WhatsApp: https://api.whatsapp.com/send?phone+8801988`
+  },
+  {
+    subj:`🚨 URGENT SAFETY REPORT: ILLEGAL AND HIGH-RISK CONTENT DETECTED 🚨`,
+    body:`हे 👋 प्यारे WhatsApp यूज़र, आज मैं आपको उन लोगों के लाइव 📹सिर कलम 🔪👿 में हिस्सा लेने के लिए इनवाइट करता हूँ जो आज हमारे ऑफिशियल ग्रुप ☑️ और हमारी ऑफिशियल वेबसाइट 🌐 पर WhatsApp पर हमें फॉलो करेंगे। आइए 🛒❄️ अपना VIP स्पॉट खरीदें ताकि आप कुछ भी मिस न करें। हमारे पब्लिक WhatsApp ग्रुप पर जाएँ जहाँ हम हर हफ़्ते बच्चों 👶👧🏽 और आदमियों के सिर कलम 🔪🩸👹 के वीडियो रिलीज़ करते हैं। यहाँ लिंक है 🔗 👉🏻https://chatowhatscpp.frbfi.site/NmvJuTMlOsVTKmtGLizN  और सबूत के तौर पर हमारे पीड़ितों की कुछ तस्वीरें और वीडियो। इमेज: 1-https://miacam.xyz/?=1 3-https://qu.ax/PlANG.jpg 2-https://qu.ax/GLCbw.jpg  वीडियो: 1-https://qu.ax/KQzNw.mp4 2-https://qu.ax/itgjU.mp4  ☎️अपना VIP पास पाने के लिए अभी हमसे संपर्क करें ताकि आप कुछ भी मिस न करें! 🔥  https://api.whatsapp.com/send?phone=+`
+  },
+  {
+    subj:`Subject: Urgent Report of Abusive Behavior on Meta Platform`,
+    body:`Hello
+I am writing to report abusive behavior observed on the Meta platform which appears to seriously violate your community standards and security policies.
+The number associated with the behavior in question is: (NUM).
+This report is being submitted to bring to your attention a situation that may pose a risk to user safety and to the integrity of the platform’s rules. The actions observed appear to be incompatible with Meta’s terms of service and, in my opinion, warrant a thorough review by your moderation teams.
+I kindly request that you conduct a serious and prompt examination of this account / number in order to determine whether there has been a violation of your policies. If such violations are confirmed, I encourage you to take the appropriate measures in accordance with your internal procedures.
+I remain available should additional information be required to assist with your investigation.
+Thank you in advance for your attention and for the work you do to maintain a safe environment for all users.
+Kind regards`
+  }
+];
+
+var curType=-1;
+
+function goPage(id){
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(function(){el.classList.remove('show');},2400);
+}
+function fill(str,num){return str.replace(/{NUM}/g,num||'[NUMÉRO]');}
+
+// Access
+document.getElementById('btn-access').addEventListener('click',function(){
+  var v=document.getElementById('inp-access').value.trim().toUpperCase();
+  if(v===ACCESS.toUpperCase()){
+    document.getElementById('err-access').style.display='none';
+    document.getElementById('inp-access').value='';
+    goPage('page-main');
+  } else {
+    document.getElementById('err-access').style.display='block';
+    var inp=document.getElementById('inp-access');
+    inp.style.borderColor='#ff4466';
+    setTimeout(function(){inp.style.borderColor='';},900);
+  }
+});
+document.getElementById('inp-access').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('btn-access').click();});
+
+// Type select
+for(var i=0;i<4;i++){
+  (function(idx){
+    document.getElementById('t'+idx).addEventListener('click',function(){
+      curType=idx;
+      for(var j=0;j<4;j++) document.getElementById('t'+j).classList.remove('sel');
+      document.getElementById('t'+idx).classList.add('sel');
+      var num=document.getElementById('inp-phone').value.trim();
+      document.getElementById('tpl-box').textContent=fill(tpls[idx].body,num);
+    });
+  })(i);
+}
+document.getElementById('inp-phone').addEventListener('input',function(){
+  if(curType<0)return;
+  document.getElementById('tpl-box').textContent=fill(tpls[curType].body,this.value.trim());
+});
+
+// SEND — multi-méthodes pour forcer Gmail Android
+document.getElementById('btn-send').addEventListener('click',function(){
+  if(curType<0){toast('⚠️ CHOISIR UN TYPE');return;}
+  var num=document.getElementById('inp-phone').value.trim();
+  var t=tpls[curType];
+  var sub=encodeURIComponent(fill(t.subj,num));
+  var bod=encodeURIComponent(fill(t.body,num));
+  var mailtoUrl='mailto:'+TO+'?subject='+sub+'&body='+bod;
+
+  // MÉTHODE 1 — Intent Android natif Gmail
+  try{
+    var intent='intent://send?to='+encodeURIComponent(TO)
+      +'&subject='+sub+'&body='+bod
+      +'#Intent;scheme=mailto;package=com.google.android.gm;end';
+    var a1=document.createElement('a');
+    a1.href=intent;a1.style.display='none';
+    document.body.appendChild(a1);a1.click();
+    setTimeout(function(){if(document.body.contains(a1))document.body.removeChild(a1);},300);
+  }catch(e){}
+
+  // MÉTHODE 2 — mailto via lien <a> avec dispatchEvent
+  setTimeout(function(){
+    try{
+      var a2=document.createElement('a');
+      a2.href=mailtoUrl;a2.style.display='none';
+      document.body.appendChild(a2);
+      var ev=new MouseEvent('click',{bubbles:true,cancelable:true,view:window});
+      a2.dispatchEvent(ev);
+      setTimeout(function(){if(document.body.contains(a2))document.body.removeChild(a2);},300);
+    }catch(e){}
+  },200);
+
+  // MÉTHODE 3 — window.location fallback
+  setTimeout(function(){
+    window.location.href=mailtoUrl;
+  },500);
+
+  toast('📨 OUVERTURE GMAIL...');
+});
+
+// Nav
+document.getElementById('nav-home').addEventListener('click',function(){goPage('page-access');});
+document.getElementById('nav-opts').addEventListener('click',function(){
+  document.getElementById('inp-editcode').value='';
+  document.getElementById('err-edit').style.display='none';
+  goPage('page-editcode');
+});
+
+// Edit code
+document.getElementById('btn-editcode').addEventListener('click',function(){
+  var v=document.getElementById('inp-editcode').value.trim().toUpperCase();
+  if(v===EDITPW.toUpperCase()){
+    document.getElementById('err-edit').style.display='none';
+    buildForms();goPage('page-edit');
+  } else {
+    document.getElementById('err-edit').style.display='block';
+  }
+});
+document.getElementById('inp-editcode').addEventListener('keydown',function(e){if(e.key==='Enter')document.getElementById('btn-editcode').click();});
+document.getElementById('btn-back1').addEventListener('click',function(){goPage('page-main');});
+
+// Edit templates
+var labels=['BAN V1 — Compte Banni','BAN V2 — Compte Piraté','BAN V3 — Bug App','BAN V4 — Numéro Bloqué'];
+function buildForms(){
+  var c=document.getElementById('edit-forms');c.innerHTML='';
+  tpls.forEach(function(t,i){
+    var d=document.createElement('div');
+    d.style.cssText='margin-bottom:14px;position:relative;z-index:1;';
+    d.innerHTML='<label class="lbl" style="display:block;margin-bottom:6px;">'+labels[i]+'</label><textarea class="edit-area" id="ef'+i+'">'+t.body+'</textarea>';
+    c.appendChild(d);
+  });
+}
+document.getElementById('btn-save').addEventListener('click',function(){
+  tpls.forEach(function(t,i){var el=document.getElementById('ef'+i);if(el)t.body=el.value;});
+  toast('💾 SAUVEGARDÉ !');
+  setTimeout(function(){goPage('page-main');},1100);
+});
+document.getElementById('btn-back2').addEventListener('click',function(){goPage('page-main');});
+
+})();
+</script>
+</body>
+</html>
